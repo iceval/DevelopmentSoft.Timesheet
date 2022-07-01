@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Timesheet.Domain;
 using Timesheet.Domain.Models;
 
@@ -6,18 +9,12 @@ namespace Timesheet.Application.Services
 {
     public class AuthService : IAuthService
     {
-        public AuthService()
+        IEmployeeRepository _employeeRepository;
+
+        public AuthService(IEmployeeRepository employeeRepository)
         {
-            Employees = new List<string>
-            {
-                "Иванов",
-                "Петров",
-                "Сидоров"
-            };
+            _employeeRepository = employeeRepository;
         }
-
-        public List<string> Employees { get; private set; }
-
 
         public bool Login(string lastName)
         {
@@ -26,18 +23,19 @@ namespace Timesheet.Application.Services
                 return false;
             }
 
-            var isEmployeeExist = Employees.Contains(lastName);
+            StaffEmployee staffEmployee = _employeeRepository.GetEmployee(lastName);
+            var isEmployeeExist = staffEmployee != null ? true : false;
 
             if (isEmployeeExist)
                 UserSession.Sessions.Add(lastName);
 
-            return Employees.Contains(lastName);
+            return isEmployeeExist;
         }
 
         public static class UserSession
         {
+
             public static HashSet<string> Sessions { get; set; } = new HashSet<string>();
         }
-
     }
 }
