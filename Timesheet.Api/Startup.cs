@@ -8,6 +8,7 @@ using Timesheet.Application.Services;
 using Timesheet.Domain;
 using Timesheet.DataAccess.CSV;
 
+
 namespace Timesheet.Api
 {
     public class Startup
@@ -25,6 +26,12 @@ namespace Timesheet.Api
             services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<ITimesheetRepository, TimesheetRepository>();
             services.AddTransient<ITimesheetService, TimesheetService>();
+            services.AddTransient<IEmployeeRepository, EmployeeRepository>();
+            services.AddTransient<IEmployeeService, EmployeeService>();
+            services.AddTransient<IReportService, ReportService>();
+
+            services.AddSingleton(x => new CsvSettings(';', "..\\Timesheet.DataAccess.CSV\\Data"));
+
             services.AddControllers();
 
 

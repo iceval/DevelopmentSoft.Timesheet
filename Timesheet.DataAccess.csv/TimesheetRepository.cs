@@ -11,31 +11,38 @@ namespace Timesheet.DataAccess.CSV
 {
     public class TimesheetRepository : ITimesheetRepository
     {
-        private const char DELIMETER = ';';
-        private const string PATH = "..\\Timesheet.DataAccess.CSV\\Data\\timesheet.csv";
+        private readonly char _delimeter;
+        private readonly string _path;
+
+        public TimesheetRepository(CsvSettings csvSettings)
+        {
+            _delimeter = csvSettings.Delimeter;
+            _path = csvSettings.Path + "\\timesheet.csv";
+        }
 
         public void Add(TimeLog timelog)
         {
 
-            var dateRow = $"{timelog.Comment}{DELIMETER}" +
-                $"{timelog.Date}{DELIMETER}" +
-                $"{timelog.LastName}{DELIMETER}" +
+            var dateRow = $"{timelog.Comment}{_delimeter}" +
+                $"{timelog.Date}{_delimeter}" +
+                $"{timelog.LastName}{_delimeter}" +
                 $"{timelog.WorkingHours}\n";
 
-            File.AppendAllText(PATH, dateRow);
+            File.AppendAllText(_path, dateRow);
         }
 
         public TimeLog[] GetTimeLogs(string lastName)
         {
-            
-            var data = File.ReadAllText("timesheet.csv");
+
+            var data = File.ReadAllText(_path);
+            var dataRows = data.Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
             var timeLogs = new List<TimeLog>();
 
-            foreach (var dataRow in data.Split("\n"))
+            foreach (var dataRow in dataRows)
             {
                 var timeLog = new TimeLog();
-                
-                var dataMembers = dataRow.Split(DELIMETER);
+
+                var dataMembers = dataRow.Split(_delimeter);
                 timeLog.Comment = dataMembers[0];
                 timeLog.Date = DateTime.TryParse(dataMembers[1], out var date) ? date : new DateTime();
                 timeLog.LastName = dataMembers[2];
