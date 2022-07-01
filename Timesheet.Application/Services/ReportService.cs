@@ -6,11 +6,11 @@ using Timesheet.Domain.Models;
 
 namespace Timesheet.Application.Services
 {
-    public class ReportService
+    public class ReportService : IReportService
     {
         private const decimal MAX_WORKING_HOURS_PER_MONTH = 160;
         private const decimal MAX_WORKING_HOURS_PER_DAY = 8;
-            
+
         private readonly ITimesheetRepository _timesheetRepository;
         private readonly IEmployeeRepository _employeeRepository;
 
@@ -27,9 +27,8 @@ namespace Timesheet.Application.Services
 
             if (timeLogs == null || timeLogs.Length == 0)
             {
-                return new EmployeeReport
+                return new EmployeeReport()
                 {
-
                     LastName = employee.LastName
                 };
             }
@@ -37,14 +36,14 @@ namespace Timesheet.Application.Services
             var totalHours = timeLogs.Sum(x => x.WorkingHours);
             decimal bill = 0;
 
-           var workingHoursGroupsByDay = timeLogs
+            var WorkingHoursGroupByDay = timeLogs
                 .GroupBy(x => x.Date.ToShortDateString());
 
-            foreach (var workingLogsPerDay in workingHoursGroupsByDay)
+            foreach (var workingLogsPerDay in WorkingHoursGroupByDay)
             {
                 int dayHours = workingLogsPerDay.Sum(x => x.WorkingHours);
 
-                if(dayHours > MAX_WORKING_HOURS_PER_DAY)
+                if (dayHours > MAX_WORKING_HOURS_PER_DAY)
                 {
                     var overtime = dayHours - MAX_WORKING_HOURS_PER_DAY;
 
@@ -55,10 +54,9 @@ namespace Timesheet.Application.Services
                 {
                     bill += dayHours / MAX_WORKING_HOURS_PER_MONTH * employee.Salary;
                 }
-                
             }
 
-            return new EmployeeReport
+            return new EmployeeReport()
             {
                 LastName = employee.LastName,
                 TimeLogs = timeLogs.ToList(),
@@ -66,5 +64,6 @@ namespace Timesheet.Application.Services
                 TotalHours = totalHours
             };
         }
+
     }
 }

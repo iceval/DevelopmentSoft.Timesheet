@@ -63,7 +63,7 @@ namespace Timesheet.Tests
             //act
 
             var result = service.Login(lastName);
-            result = service.Login(lastName);
+
 
             //assert
             employeeRepositoryMock.VerifyAll();
