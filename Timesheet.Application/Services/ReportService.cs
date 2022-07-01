@@ -36,24 +36,87 @@ namespace Timesheet.Application.Services
             var totalHours = timeLogs.Sum(x => x.WorkingHours);
             decimal bill = 0;
 
-            var WorkingHoursGroupByDay = timeLogs
-                .GroupBy(x => x.Date.ToShortDateString());
-
-            foreach (var workingLogsPerDay in WorkingHoursGroupByDay)
+            switch (lastName)
             {
-                int dayHours = workingLogsPerDay.Sum(x => x.WorkingHours);
+                // staff
+                case "Петров":
+                    {
+                        var WorkingHoursGroupByDay = timeLogs
+                            .GroupBy(x => x.Date.ToShortDateString());
 
-                if (dayHours > MAX_WORKING_HOURS_PER_DAY)
-                {
-                    var overtime = dayHours - MAX_WORKING_HOURS_PER_DAY;
+                        foreach (var workingLogsPerDay in WorkingHoursGroupByDay)
+                        {
+                            int dayHours = workingLogsPerDay.Sum(x => x.WorkingHours);
 
-                    bill += MAX_WORKING_HOURS_PER_DAY / MAX_WORKING_HOURS_PER_MONTH * employee.Salary;
-                    bill += overtime / MAX_WORKING_HOURS_PER_MONTH * employee.Salary * 2;
-                }
-                else
-                {
-                    bill += dayHours / MAX_WORKING_HOURS_PER_MONTH * employee.Salary;
-                }
+                            if (dayHours > MAX_WORKING_HOURS_PER_DAY)
+                            {
+                                var overtime = dayHours - MAX_WORKING_HOURS_PER_DAY;
+
+                                bill += MAX_WORKING_HOURS_PER_DAY / MAX_WORKING_HOURS_PER_MONTH * employee.Salary;
+                                bill += overtime / MAX_WORKING_HOURS_PER_MONTH * employee.Salary * 2;
+                            }
+                            else
+                            {
+                                bill += dayHours / MAX_WORKING_HOURS_PER_MONTH * employee.Salary;
+                            }
+                        }
+
+                        break;
+                    }
+                // manager
+                case "Иванов":
+                    {
+                        var WorkingHoursGroupByDay = timeLogs
+                            .GroupBy(x => x.Date.ToShortDateString());
+
+                        foreach (var workingLogsPerDay in WorkingHoursGroupByDay)
+                        {
+                            int dayHours = workingLogsPerDay.Sum(x => x.WorkingHours);
+
+                            if (dayHours > MAX_WORKING_HOURS_PER_DAY)
+                            {
+                                var overtime = dayHours - MAX_WORKING_HOURS_PER_DAY;
+
+                                bill += MAX_WORKING_HOURS_PER_DAY / MAX_WORKING_HOURS_PER_MONTH * employee.Salary;
+                                bill += overtime / MAX_WORKING_HOURS_PER_MONTH * employee.Salary * 2;
+                            }
+                            else
+                            {
+                                bill += dayHours / MAX_WORKING_HOURS_PER_MONTH * employee.Salary;
+                            }
+                        }
+
+                        break;
+                    }
+                // freelancer
+                case "Сидоров":
+                    {
+                        var WorkingHoursGroupByDay = timeLogs
+                            .GroupBy(x => x.Date.ToShortDateString());
+
+                        foreach (var workingLogsPerDay in WorkingHoursGroupByDay)
+                        {
+                            int dayHours = workingLogsPerDay.Sum(x => x.WorkingHours);
+
+                            if (dayHours > MAX_WORKING_HOURS_PER_DAY)
+                            {
+                                var overtime = dayHours - MAX_WORKING_HOURS_PER_DAY;
+
+                                bill += MAX_WORKING_HOURS_PER_DAY / MAX_WORKING_HOURS_PER_MONTH * employee.Salary;
+                                bill += overtime / MAX_WORKING_HOURS_PER_MONTH * employee.Salary * 2;
+                            }
+                            else
+                            {
+                                bill += dayHours / MAX_WORKING_HOURS_PER_MONTH * employee.Salary;
+                            }
+                        }
+
+                        break;
+                    }
+                default:
+                    {
+                        break;
+                    }
             }
 
             return new EmployeeReport()
