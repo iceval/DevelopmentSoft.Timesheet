@@ -19,23 +19,19 @@ namespace Timesheet.Tests
         [TestCase("Сидоров")]
         public void Login_ShouldReturnTrue(string lastName)
         {
-            //arrange
+            // arrange
             var employeeRepositoryMock = new Mock<IEmployeeRepository>();
-            employeeRepositoryMock.
-                Setup(x => x.GetEmployee(It.Is<string>(y => y == lastName)))
-                .Returns(() => new StaffEmployee
-                {
-                    LastName = lastName,
-                    Salary = 70000
-                })
+            employeeRepositoryMock
+                .Setup(x => x.GetEmployee(It.Is<string>(y => y == lastName)))
+                .Returns(() => new StaffEmployee(lastName, 70000))
                 .Verifiable();
 
             var service = new AuthService(employeeRepositoryMock.Object);
-            //act
 
+            // act
             var result = service.Login(lastName);
 
-            //assert
+            // assert
             employeeRepositoryMock.VerifyAll();
 
             Assert.IsNotNull(UserSession.Sessions);
@@ -44,28 +40,23 @@ namespace Timesheet.Tests
             Assert.IsTrue(result);
         }
 
-        public void Login_InvokeLoginTwiceForOneLastName_ShouldReturnTrue()
+        [TestCase("Иванов")]
+        public void Login_InvokeLoginTwiceForOneLastName_ShouldReturnTrue(string lastName)
         {
-            //arrange
-            string lastName = "Иванов";
+            // arrange
             var employeeRepositoryMock = new Mock<IEmployeeRepository>();
-            employeeRepositoryMock.
-                Setup(x => x.GetEmployee(It.Is<string>(y => y == lastName)))
-                .Returns(() => new StaffEmployee
-                {
-                    LastName = lastName,
-                    Salary = 70000
-                })
+            employeeRepositoryMock
+                .Setup(x => x.GetEmployee(It.Is<string>(y => y == lastName)))
+                .Returns(() => new StaffEmployee(lastName, 70000))
                 .Verifiable();
 
             var service = new AuthService(employeeRepositoryMock.Object);
 
-            //act
-
+            // act
             var result = service.Login(lastName);
+            result = service.Login(lastName);
 
-
-            //assert
+            // assert
             employeeRepositoryMock.VerifyAll();
 
             Assert.IsNotNull(UserSession.Sessions);
@@ -78,38 +69,36 @@ namespace Timesheet.Tests
         [TestCase("")]
         public void Login_NotValidArgument_ShouldReturnFalse(string lastName)
         {
-            //arrange
+            // arrange
             var employeeRepositoryMock = new Mock<IEmployeeRepository>();
 
             var service = new AuthService(employeeRepositoryMock.Object);
 
-            //act
+            // act
             var result = service.Login(lastName);
 
-            //assert
+            // assert
             employeeRepositoryMock.Verify(x => x.GetEmployee(lastName), Times.Never);
 
             Assert.IsFalse(result);
-            Assert.IsEmpty(UserSession.Sessions);
             Assert.IsTrue(UserSession.Sessions.Contains(lastName) == false);
         }
 
         [TestCase("TestUser")]
         public void Login_UserDoesntExist_ShouldReturnFalse(string lastName)
         {
-            //arrange
+            // arrange
             var employeeRepositoryMock = new Mock<IEmployeeRepository>();
-
             employeeRepositoryMock
                 .Setup(x => x.GetEmployee(lastName))
                 .Returns(() => null);
 
             var service = new AuthService(employeeRepositoryMock.Object);
 
-            //act
+            // act
             var result = service.Login(lastName);
 
-            //assert
+            // assert
             employeeRepositoryMock.Verify(x => x.GetEmployee(lastName), Times.Once);
 
             Assert.IsFalse(result);

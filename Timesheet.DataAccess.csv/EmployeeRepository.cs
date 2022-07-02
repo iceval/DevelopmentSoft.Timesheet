@@ -38,11 +38,8 @@ namespace Timesheet.DataAccess.CSV
                 if (dataRow.Contains(lastName))
                 {
                     var dataMembers = dataRow.Split(_delimeter);
-                    staffEmployee = new StaffEmployee()
-                    {
-                        LastName = dataMembers[0],
-                        Salary = decimal.TryParse(dataMembers[1], out var salary) ? salary : 0
-                    };
+                    staffEmployee = new StaffEmployee(dataMembers[0],
+                                                      decimal.TryParse(dataMembers[1], out var salary) ? salary : 0);
                     break;
                 }
             }

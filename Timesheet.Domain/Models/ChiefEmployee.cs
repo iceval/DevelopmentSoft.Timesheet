@@ -6,11 +6,15 @@ using System.Threading.Tasks;
 
 namespace Timesheet.Domain.Models
 {
-    public class StaffEmployee : Employee
+    [Serializable]
+    public class ChiefEmployee : Employee
     {
-        public StaffEmployee(string lastname, decimal salary) : base(lastname, salary)
+        public ChiefEmployee(string lastname, decimal salary, decimal bonus) : base(lastname, salary)
         {
+            Bonus = bonus;
         }
+
+        public decimal Bonus { get; set; }
 
         public override decimal CalculateBill(TimeLog[] timeLogs)
         {
@@ -25,10 +29,8 @@ namespace Timesheet.Domain.Models
 
                 if (dayHours > MAX_WORKING_HOURS_PER_DAY)
                 {
-                    var overtime = dayHours - MAX_WORKING_HOURS_PER_DAY;
-
-                    bill += MAX_WORKING_HOURS_PER_DAY / MAX_WORKING_HOURS_PER_MONTH * Salary;
-                    bill += overtime / MAX_WORKING_HOURS_PER_MONTH * Salary * 2;
+                    decimal bonusPerDay = MAX_WORKING_HOURS_PER_DAY / MAX_WORKING_HOURS_PER_MONTH * Bonus;
+                    bill += MAX_WORKING_HOURS_PER_DAY / MAX_WORKING_HOURS_PER_MONTH * Salary + bonusPerDay;
                 }
                 else
                 {
@@ -41,7 +43,7 @@ namespace Timesheet.Domain.Models
 
         public override string GetPersonalData(char delimeter)
         {
-            throw new NotImplementedException();
+            return $"{LastName}{delimeter}{Salary}{delimeter}Менеджер{delimeter}\n";
         }
     }
 }

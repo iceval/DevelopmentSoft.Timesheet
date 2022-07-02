@@ -8,9 +8,6 @@ namespace Timesheet.Application.Services
 {
     public class ReportService : IReportService
     {
-        private const decimal MAX_WORKING_HOURS_PER_MONTH = 160;
-        private const decimal MAX_WORKING_HOURS_PER_DAY = 8;
-
         private readonly ITimesheetRepository _timesheetRepository;
         private readonly IEmployeeRepository _employeeRepository;
 
@@ -34,97 +31,16 @@ namespace Timesheet.Application.Services
             }
 
             var totalHours = timeLogs.Sum(x => x.WorkingHours);
-            decimal bill = 0;
-
-            switch (lastName)
-            {
-                // staff
-                case "Петров":
-                    {
-                        var WorkingHoursGroupByDay = timeLogs
-                            .GroupBy(x => x.Date.ToShortDateString());
-
-                        foreach (var workingLogsPerDay in WorkingHoursGroupByDay)
-                        {
-                            int dayHours = workingLogsPerDay.Sum(x => x.WorkingHours);
-
-                            if (dayHours > MAX_WORKING_HOURS_PER_DAY)
-                            {
-                                var overtime = dayHours - MAX_WORKING_HOURS_PER_DAY;
-
-                                bill += MAX_WORKING_HOURS_PER_DAY / MAX_WORKING_HOURS_PER_MONTH * employee.Salary;
-                                bill += overtime / MAX_WORKING_HOURS_PER_MONTH * employee.Salary * 2;
-                            }
-                            else
-                            {
-                                bill += dayHours / MAX_WORKING_HOURS_PER_MONTH * employee.Salary;
-                            }
-                        }
-
-                        break;
-                    }
-                // manager
-                case "Иванов":
-                    {
-                        var WorkingHoursGroupByDay = timeLogs
-                            .GroupBy(x => x.Date.ToShortDateString());
-
-                        foreach (var workingLogsPerDay in WorkingHoursGroupByDay)
-                        {
-                            int dayHours = workingLogsPerDay.Sum(x => x.WorkingHours);
-
-                            if (dayHours > MAX_WORKING_HOURS_PER_DAY)
-                            {
-                                var overtime = dayHours - MAX_WORKING_HOURS_PER_DAY;
-
-                                bill += MAX_WORKING_HOURS_PER_DAY / MAX_WORKING_HOURS_PER_MONTH * employee.Salary;
-                                bill += overtime / MAX_WORKING_HOURS_PER_MONTH * employee.Salary * 2;
-                            }
-                            else
-                            {
-                                bill += dayHours / MAX_WORKING_HOURS_PER_MONTH * employee.Salary;
-                            }
-                        }
-
-                        break;
-                    }
-                // freelancer
-                case "Сидоров":
-                    {
-                        var WorkingHoursGroupByDay = timeLogs
-                            .GroupBy(x => x.Date.ToShortDateString());
-
-                        foreach (var workingLogsPerDay in WorkingHoursGroupByDay)
-                        {
-                            int dayHours = workingLogsPerDay.Sum(x => x.WorkingHours);
-
-                            if (dayHours > MAX_WORKING_HOURS_PER_DAY)
-                            {
-                                var overtime = dayHours - MAX_WORKING_HOURS_PER_DAY;
-
-                                bill += MAX_WORKING_HOURS_PER_DAY / MAX_WORKING_HOURS_PER_MONTH * employee.Salary;
-                                bill += overtime / MAX_WORKING_HOURS_PER_MONTH * employee.Salary * 2;
-                            }
-                            else
-                            {
-                                bill += dayHours / MAX_WORKING_HOURS_PER_MONTH * employee.Salary;
-                            }
-                        }
-
-                        break;
-                    }
-                default:
-                    {
-                        break;
-                    }
-            }
+            decimal bill = employee.CalculateBill(timeLogs);
 
             return new EmployeeReport()
             {
                 LastName = employee.LastName,
                 TimeLogs = timeLogs.ToList(),
                 Bill = bill,
-                TotalHours = totalHours
+                TotalHours = totalHours,
+                StartDate = timeLogs.Select(t => t.Date).Min(),
+                EndDate = timeLogs.Select(t => t.Date).Max()
             };
         }
 
