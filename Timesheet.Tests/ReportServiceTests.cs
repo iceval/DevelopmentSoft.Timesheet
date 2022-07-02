@@ -173,13 +173,15 @@ namespace Timesheet.Tests
         }
 
         [Test]
-        public void GetEmployeeReport_TimeLogWithOvertimeForOneDay_ShouldReturnReportPerOneMonth()
+        public void GetEmployeeReport_Staff_TimeLogWithOvertimeForOneDay_ShouldReturnReportPerOneMonth()
         {
             // arrange
             var timesheetRepositotyMock = new Mock<ITimesheetRepository>();
             var employeeRepositoryMock = new Mock<IEmployeeRepository>();
+
             var expectedLastName = "Иванов";
-            var expectedTotal = 8m / 160m * 70000m + 4m / 160m * 70000m * 2;
+            var salary = 70000m;
+            var expectedTotal = 7000; // (8m / 160m * 70000m) + (4m / 160m * 70000m * 2)
             var expectedTotalHours = 12;
 
             timesheetRepositotyMock
@@ -198,7 +200,108 @@ namespace Timesheet.Tests
 
             employeeRepositoryMock
                 .Setup(x => x.GetEmployee(It.Is<string>(y => y == expectedLastName)))
-                .Returns(() => new StaffEmployee(expectedLastName, 70000))
+                .Returns(() => new StaffEmployee(expectedLastName, salary))
+                .Verifiable();
+
+            var service = new ReportService(timesheetRepositotyMock.Object, employeeRepositoryMock.Object);
+
+            // act
+            var result = service.GetEmployeeReport(expectedLastName);
+
+            // assert
+            timesheetRepositotyMock.VerifyAll();
+            employeeRepositoryMock.VerifyAll();
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(expectedLastName, result.LastName);
+
+            Assert.IsNotNull(result.TimeLogs);
+            Assert.IsNotEmpty(result.TimeLogs);
+
+            Assert.AreEqual(expectedTotal, result.Bill);
+            Assert.AreEqual(expectedTotalHours, result.TotalHours);
+        }
+
+        [Test]
+        public void GetEmployeeReport_Freelancer_TimeLogWithOvertimeForOneDay_ShouldReturnReportPerOneMonth()
+        {
+            // arrange
+            var timesheetRepositotyMock = new Mock<ITimesheetRepository>();
+            var employeeRepositoryMock = new Mock<IEmployeeRepository>();
+
+            var expectedLastName = "Иванов";
+            var salary = 1000m;
+            var expectedTotal = 12000; // 12 * 1000m
+            var expectedTotalHours = 12;
+
+            timesheetRepositotyMock
+                .Setup(x => x.GetTimeLogs(It.Is<string>(y => y == expectedLastName)))
+                .Returns(() => new[]
+                {
+                    new TimeLog
+                    {
+                        LastName = expectedLastName,
+                        Comment = Guid.NewGuid().ToString(),
+                        Date = DateTime.Now.AddDays(-1),
+                        WorkingHours = 12
+                    }
+                })
+                .Verifiable();
+
+            employeeRepositoryMock
+                .Setup(x => x.GetEmployee(It.Is<string>(y => y == expectedLastName)))
+                .Returns(() => new FreelancerEmployee(expectedLastName, salary))
+                .Verifiable();
+
+            var service = new ReportService(timesheetRepositotyMock.Object, employeeRepositoryMock.Object);
+
+            // act
+            var result = service.GetEmployeeReport(expectedLastName);
+
+            // assert
+            timesheetRepositotyMock.VerifyAll();
+            employeeRepositoryMock.VerifyAll();
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(expectedLastName, result.LastName);
+
+            Assert.IsNotNull(result.TimeLogs);
+            Assert.IsNotEmpty(result.TimeLogs);
+
+            Assert.AreEqual(expectedTotal, result.Bill);
+            Assert.AreEqual(expectedTotalHours, result.TotalHours);
+        }
+
+        [Test]
+        public void GetEmployeeReport_Manager_TimeLogWithOvertimeForOneDay_ShouldReturnReportPerOneMonth()
+        {
+            // arrange
+            var timesheetRepositotyMock = new Mock<ITimesheetRepository>();
+            var employeeRepositoryMock = new Mock<IEmployeeRepository>();
+
+            var expectedLastName = "Иванов";
+            var salary = 70000m;
+            var bonus = 20000m;
+            var expectedTotal = 4500; // 8m / 160m * 70000m + 8m / 160m * 20000 (Manager bonus = 1000 for overtime work in one day)
+            var expectedTotalHours = 12;
+
+            timesheetRepositotyMock
+                .Setup(x => x.GetTimeLogs(It.Is<string>(y => y == expectedLastName)))
+                .Returns(() => new[]
+                {
+                    new TimeLog
+                    {
+                        LastName = expectedLastName,
+                        Comment = Guid.NewGuid().ToString(),
+                        Date = DateTime.Now.AddDays(-1),
+                        WorkingHours = 12
+                    }
+                })
+                .Verifiable();
+
+            employeeRepositoryMock
+                .Setup(x => x.GetEmployee(It.Is<string>(y => y == expectedLastName)))
+                .Returns(() => new ChiefEmployee(expectedLastName, salary, bonus))
                 .Verifiable();
 
             var service = new ReportService(timesheetRepositotyMock.Object, employeeRepositoryMock.Object);

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Timesheet.Domain.Models
 {
-    class FreelancerEmployee : Employee
+    public class FreelancerEmployee : Employee
     {
         public FreelancerEmployee(string lastname, decimal salary) : base(lastname, salary)
         {
