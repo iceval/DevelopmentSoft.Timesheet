@@ -21,14 +21,14 @@ namespace Timesheet.Application.Services
 
         public bool TrackTime(TimeLog timeLog, string lastName)
         {
-            bool isValid = timeLog.WorkingHours > 0
-                && timeLog.WorkingHours <= 24
-                && !string.IsNullOrWhiteSpace(timeLog.LastName);
+            //bool isValid = timeLog.WorkingHours > 0
+            //    && timeLog.WorkingHours <= 24
+            //    && !string.IsNullOrWhiteSpace(timeLog.LastName);
 
             var employee = _employeeRepository.GetEmployee(lastName);
-            //isValid = isValid && UserSession.Sessions.Contains(timeLog.LastName);
+            bool isValid = employee != null ? employee.CheckInputLog(timeLog) : false;
 
-            if (!isValid || employee == null)
+            if (!isValid)
             {
                 return false;
             }

@@ -23,7 +23,7 @@ namespace Timesheet.DataAccess.CSV
         public void AddEmployee(Employee employee)
         {
             var dataRow = $"{employee.LastName}{_delimeter}" +
-                $"{employee.Salary}\n";
+                $"{employee.Salary}{_delimeter}" + $"{employee.Position}\n";
             File.AppendAllText(_path, dataRow);
         }
 
@@ -56,7 +56,8 @@ namespace Timesheet.DataAccess.CSV
                             break;
                         default:
                             break;
-                    }break;
+                    }
+                    break;
                 }
             }
             return employee;

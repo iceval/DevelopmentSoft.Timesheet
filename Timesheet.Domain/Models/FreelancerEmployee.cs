@@ -8,7 +8,7 @@ namespace Timesheet.Domain.Models
 {
     public class FreelancerEmployee : Employee
     {
-        public FreelancerEmployee(string lastname, decimal salary) : base(lastname, salary)
+        public FreelancerEmployee(string lastname, decimal salary) : base(lastname, salary, "Freelancer")
         {
         }
 

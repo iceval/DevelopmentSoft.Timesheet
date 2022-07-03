@@ -8,7 +8,7 @@ namespace Timesheet.Domain.Models
 {
     public class StaffEmployee : Employee
     {
-        public StaffEmployee(string lastname, decimal salary) : base(lastname, salary)
+        public StaffEmployee(string lastname, decimal salary) : base(lastname, salary, "Staff")
         {
         }
 
@@ -41,7 +41,14 @@ namespace Timesheet.Domain.Models
 
         public override string GetPersonalData(char delimeter)
         {
-            throw new NotImplementedException();
+            return $"{LastName}{delimeter}{Salary}{delimeter}Штатный сотрудник{delimeter}\n";
+        }
+
+        public override bool CheckInputLog(TimeLog timeLog)
+        {
+            bool isValid = base.CheckInputLog(timeLog);
+            isValid = timeLog.LastName == this.LastName && isValid;
+            return isValid;
         }
     }
 }
