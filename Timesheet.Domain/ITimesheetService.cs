@@ -1,11 +1,9 @@
-﻿using System.Collections.Generic;
-using Timesheet.Domain.Models;
+﻿using Timesheet.Domain.Models;
 
 namespace Timesheet.Domain
 {
     public interface ITimesheetService
     {
-        bool TrackTime(TimeLog timeLog);
-
+        bool TrackTime(TimeLog timelog, string lastName);
     }
 }
