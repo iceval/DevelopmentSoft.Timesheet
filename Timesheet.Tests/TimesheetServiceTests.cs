@@ -5,8 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Timesheet.Domain.Models;
-using Timesheet.Application.Services;
-using static Timesheet.Application.Services.AuthService;
+using Timesheet.BussinessLogic.Services;
+using static Timesheet.BussinessLogic.Services.AuthService;
 using Moq;
 using Timesheet.Domain;
 
