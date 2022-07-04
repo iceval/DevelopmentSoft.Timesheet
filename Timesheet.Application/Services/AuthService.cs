@@ -19,20 +19,13 @@ namespace Timesheet.Application.Services
             _employeeRepository = employeeRepository;
         }
 
-        public bool Login(string lastName)
+        public string Login(string lastName)
         {
-            if (string.IsNullOrWhiteSpace(lastName))
-            {
-                return false;
-            }
-
             Employee employee = _employeeRepository.GetEmployee(lastName);
-            var isEmployeeExist = employee != null;
+            var secret = "secret secret secret secret secret";
+            var token = GenerateToken(secret, employee);
 
-            if (isEmployeeExist)
-                UserSession.Sessions.Add(lastName);
-
-            return isEmployeeExist;
+            return token;
         }
 
         public string GenerateToken(string secret, Employee employee)

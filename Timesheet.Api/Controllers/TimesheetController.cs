@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Timesheet.Api.Models;
 using Timesheet.Application.Services;
 using Timesheet.Domain;
 using Timesheet.Domain.Models;
@@ -21,11 +22,25 @@ namespace Timesheet.Api.Controllers
         }
 
         [HttpPost]
-        public ActionResult<bool> TrackTime(TimeLog timeLog)
+        public ActionResult<bool> TrackTime(CreateTimeLogRequest request)
         {
             var lastname = (string)HttpContext.Items["LastName"];
 
-            return Ok(_timesheetService.TrackTime(timeLog, lastname));
+            if (ModelState.IsValid)
+            {
+                var timeLog = new TimeLog
+                {
+                    Comment = request.Comment,
+                    Date = request.Date,
+                    LastName = request.LastName,
+                    WorkingHours = request.WorkingHours
+                };
+
+                var result = _timesheetService.TrackTime(timeLog, lastname);
+                return Ok(result);
+            }
+
+            return BadRequest();
         }
     }
 }

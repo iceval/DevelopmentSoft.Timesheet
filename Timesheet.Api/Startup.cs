@@ -1,9 +1,12 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Timesheet.Api.Models;
 using Timesheet.Application.Services;
 using Timesheet.Domain;
 using Timesheet.DataAccess.CSV;
@@ -23,6 +26,8 @@ namespace Timesheet.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<IValidator<CreateTimeLogRequest>, TimeLogFluentValidator>(); 
+
             services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<ITimesheetRepository, TimesheetRepository>();
             services.AddTransient<ITimesheetService, TimesheetService>();
@@ -32,6 +37,7 @@ namespace Timesheet.Api
 
             services.AddSingleton(x => new CsvSettings(';', "..\\Timesheet.DataAccess.CSV\\Data"));
 
+            services.AddControllers().AddFluentValidation();
             services.AddControllers();
 
 

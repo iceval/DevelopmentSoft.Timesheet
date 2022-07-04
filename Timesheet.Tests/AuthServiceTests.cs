@@ -34,10 +34,10 @@ namespace Timesheet.Tests
             // assert
             employeeRepositoryMock.VerifyAll();
 
+            Assert.False(string.IsNullOrWhiteSpace(result));
             Assert.IsNotNull(UserSession.Sessions);
             Assert.IsNotEmpty(UserSession.Sessions);
             Assert.IsTrue(UserSession.Sessions.Contains(lastName));
-            Assert.IsTrue(result);
         }
 
         [TestCase("Иванов")]
@@ -59,10 +59,10 @@ namespace Timesheet.Tests
             // assert
             employeeRepositoryMock.VerifyAll();
 
+            Assert.False(string.IsNullOrWhiteSpace(result));
             Assert.IsNotNull(UserSession.Sessions);
             Assert.IsNotEmpty(UserSession.Sessions);
             Assert.IsTrue(UserSession.Sessions.Contains(lastName));
-            Assert.IsTrue(result);
         }
 
         [TestCase(null)]
@@ -80,7 +80,7 @@ namespace Timesheet.Tests
             // assert
             employeeRepositoryMock.Verify(x => x.GetEmployee(lastName), Times.Never);
 
-            Assert.IsFalse(result);
+            Assert.False(string.IsNullOrWhiteSpace(result));
             Assert.IsTrue(UserSession.Sessions.Contains(lastName) == false);
         }
 
@@ -101,7 +101,7 @@ namespace Timesheet.Tests
             // assert
             employeeRepositoryMock.Verify(x => x.GetEmployee(lastName), Times.Once);
 
-            Assert.IsFalse(result);
+            Assert.False(string.IsNullOrWhiteSpace(result));
             Assert.IsTrue(UserSession.Sessions.Contains(lastName) == false);
         }
 
