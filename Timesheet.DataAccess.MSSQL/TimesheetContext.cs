@@ -11,7 +11,39 @@ namespace Timesheet.DataAccess.MSSQL
 
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Employee>()
+                .HasData(new[]
+                {
+                    new Employee
+                    {
+                        Id = 1,
+                        LastName = "Иванов",
+                        Position = Domain.Models.Position.Chief,
+                        Salary = 200000m,
+                        Bonus = 20000m
+                    },
+                    new Employee
+                    {
+                        Id = 2,
+                        LastName = "Сидоров",
+                        Position = Domain.Models.Position.Freelancer,
+                        Salary = 120000m
+                    },
+                    new Employee
+                    {
+                        Id = 3,
+                        LastName = "Петров",
+                        Position = Domain.Models.Position.Staff,
+                        Salary = 1000m
+                    }
+                });
+
+            base.OnModelCreating(modelBuilder);
+        }
+
         public DbSet<TimeLog> TimeLogs { get; set; }
-        public DbSet<Employee> Employee { get; set; }
+        public DbSet<Employee> Employees { get; set; }
     }
 }

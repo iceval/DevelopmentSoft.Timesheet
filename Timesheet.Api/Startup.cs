@@ -28,12 +28,15 @@ namespace Timesheet.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAutoMapper(typeof(ApiMappingProfile), typeof(DataAccessMappingProfile));
+
             services.AddTransient<IValidator<CreateTimeLogRequest>, TimeLogFluentValidator>(); 
 
             services.AddTransient<IAuthService, AuthService>();
-            services.AddTransient<ITimesheetRepository, TimesheetRepository>();
+            services.AddTransient<ITimesheetRepository, DataAccess.CSV.TimesheetRepository>();
             services.AddTransient<ITimesheetService, TimesheetService>();
-            services.AddTransient<IEmployeeRepository, EmployeeRepository>();
+            services.AddTransient<IEmployeeRepository, DataAccess.CSV.EmployeeRepository>();
+            services.AddTransient<IEmployeeRepository, DataAccess.MSSQL.Repositories.EmployeeRepository>();
             services.AddTransient<IEmployeeService, EmployeeService>();
             services.AddTransient<IReportService, ReportService>();
             services.AddTransient<IIssuesService, IssuesService>();
@@ -43,7 +46,8 @@ namespace Timesheet.Api
             services.AddSingleton(x => new CsvSettings(';', "..\\Timesheet.DataAccess.CSV\\Data"));
 
 
-            services.AddDbContext<TimesheetContext>(x => x.UseSqlServer(Configuration.GetConnectionString("TimesheetContext")));
+            services.AddDbContext<TimesheetContext>(x =>
+                x.UseSqlServer(Configuration.GetConnectionString("TimesheetContext")));
 
 
             services.AddControllers().AddFluentValidation();

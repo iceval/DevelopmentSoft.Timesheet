@@ -5,6 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Timesheet.BussinessLogic.Exceptions;
 using Timesheet.Domain;
 using Timesheet.Domain.Models;
 
@@ -21,7 +22,18 @@ namespace Timesheet.BussinessLogic.Services
 
         public string Login(string lastName)
         {
-            Employee employee = _employeeRepository.GetEmployee(lastName);
+            if (string.IsNullOrWhiteSpace(lastName))
+            {
+                throw new ArgumentException(nameof(lastName));
+            }
+
+            var employee = _employeeRepository.Get(lastName);
+
+            if (employee == null)
+            {
+                throw new NotFoundException($"Employee with last name {lastName}");
+            }
+
             var secret = "secret secret secret secret secret";
             var token = GenerateToken(secret, employee);
 
@@ -36,7 +48,7 @@ namespace Timesheet.BussinessLogic.Services
 
             var descriptor = new SecurityTokenDescriptor
             {
-                Audience = employee.Position,
+                Audience = employee.Position.ToString(),
                 Claims = new Dictionary<string, object>
                 {
                     { "LastName", employee.LastName}

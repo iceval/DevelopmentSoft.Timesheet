@@ -24,7 +24,7 @@ namespace Timesheet.Tests
             var expectedEmployee = new StaffEmployee(lastname, 20000);
 
             employeeRepository
-                .Setup(x => x.GetEmployee(lastname))
+                .Setup(x => x.Get(lastname))
                 .Returns(expectedEmployee)
                 .Verifiable();
 

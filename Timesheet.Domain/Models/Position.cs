@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Timesheet.Domain.Models;
 
-namespace Timesheet.Domain
+namespace Timesheet.Domain.Models
 {
-    public interface IEmployeeService
+    public enum Position
     {
-        bool Add(Employee employee);
+        Chief,
+        Staff,
+        Freelancer
     }
 }

@@ -8,7 +8,7 @@ namespace Timesheet.Domain.Models
 {
     public class StaffEmployee : Employee
     {
-        public StaffEmployee(string lastname, decimal salary) : base(lastname, salary, "Staff")
+        public StaffEmployee(string lastname, decimal salary) : base(lastname, salary, Position.Staff)
         {
         }
 
@@ -47,7 +47,7 @@ namespace Timesheet.Domain.Models
         public override bool CheckInputLog(TimeLog timeLog)
         {
             bool isValid = base.CheckInputLog(timeLog);
-            isValid = timeLog.LastName == this.LastName && isValid;
+            isValid = timeLog.Name == this.LastName && isValid;
             return isValid;
         }
     }

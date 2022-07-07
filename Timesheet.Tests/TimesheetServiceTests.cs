@@ -43,12 +43,12 @@ namespace Timesheet.Tests
             {
                 Date = DateTime.Now,
                 WorkingHours = 1,
-                LastName = expectedLastName,
+                Name = expectedLastName,
                 Comment = Guid.NewGuid().ToString()
             };
 
             _employeeRepositoryMock
-                .Setup(x => x.GetEmployee(expectedLastName))
+                .Setup(x => x.Get(expectedLastName))
                 .Returns(() => new StaffEmployee(expectedLastName, 0m))
                 .Verifiable();
 
@@ -73,12 +73,12 @@ namespace Timesheet.Tests
             {
                 Date = DateTime.Now,
                 WorkingHours = 1,
-                LastName = Guid.NewGuid().ToString(),
+                Name = Guid.NewGuid().ToString(),
                 Comment = Guid.NewGuid().ToString()
             };
 
             _employeeRepositoryMock
-                .Setup(x => x.GetEmployee(expectedLastName))
+                .Setup(x => x.Get(expectedLastName))
                 .Returns(() => new StaffEmployee(expectedLastName, 0m))
                 .Verifiable();
 
@@ -103,12 +103,12 @@ namespace Timesheet.Tests
             {
                 Date = DateTime.Now.AddDays(-10),
                 WorkingHours = 1,
-                LastName = expectedLastName,
+                Name = expectedLastName,
                 Comment = Guid.NewGuid().ToString()
             };
 
             _employeeRepositoryMock
-                .Setup(x => x.GetEmployee(expectedLastName))
+                .Setup(x => x.Get(expectedLastName))
                 .Returns(() => new StaffEmployee(expectedLastName, 0m))
                 .Verifiable();
 
@@ -133,12 +133,12 @@ namespace Timesheet.Tests
             {
                 Date = DateTime.Now,
                 WorkingHours = 1,
-                LastName = expectedLastName,
+                Name = expectedLastName,
                 Comment = Guid.NewGuid().ToString()
             };
 
             _employeeRepositoryMock
-                .Setup(x => x.GetEmployee(expectedLastName))
+                .Setup(x => x.Get(expectedLastName))
                 .Returns(() => new ChiefEmployee(expectedLastName, 0m, 0m))
                 .Verifiable();
 
@@ -167,17 +167,17 @@ namespace Timesheet.Tests
             {
                 Date = new DateTime(),
                 WorkingHours = hours,
-                LastName = lastName,
+                Name = lastName,
                 Comment = Guid.NewGuid().ToString()
             };
 
             _employeeRepositoryMock
-                .Setup(x => x.GetEmployee(lastName))
+                .Setup(x => x.Get(lastName))
                 .Returns(() => null)
                 .Verifiable();
 
             // act
-            var result = _service.TrackTime(timeLog, timeLog.LastName);
+            var result = _service.TrackTime(timeLog, timeLog.Name);
 
             // assert
             _employeeRepositoryMock.VerifyAll();
@@ -197,12 +197,12 @@ namespace Timesheet.Tests
             {
                 Date = DateTime.Now,
                 WorkingHours = 2,
-                LastName = expectedLastName,
+                Name = expectedLastName,
                 Comment = Guid.NewGuid().ToString()
             };
 
             _employeeRepositoryMock
-                .Setup(x => x.GetEmployee(expectedLastName))
+                .Setup(x => x.Get(expectedLastName))
                 .Returns(() => new FreelancerEmployee(expectedLastName, 0m))
                 .Verifiable();
 
@@ -231,12 +231,12 @@ namespace Timesheet.Tests
             {
                 Date = DateTime.Now.AddDays(-3),
                 WorkingHours = 2,
-                LastName = expectedLastName,
+                Name = expectedLastName,
                 Comment = Guid.NewGuid().ToString()
             };
 
             _employeeRepositoryMock
-                .Setup(x => x.GetEmployee(expectedLastName))
+                .Setup(x => x.Get(expectedLastName))
                 .Returns(() => new FreelancerEmployee(expectedLastName, 0m))
                 .Verifiable();
 

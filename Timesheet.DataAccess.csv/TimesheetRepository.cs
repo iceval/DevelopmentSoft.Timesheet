@@ -25,7 +25,7 @@ namespace Timesheet.DataAccess.CSV
 
             var dateRow = $"{timelog.Comment}{_delimeter}" +
                 $"{timelog.Date}{_delimeter}" +
-                $"{timelog.LastName}{_delimeter}" +
+                $"{timelog.Name}{_delimeter}" +
                 $"{timelog.WorkingHours}\n";
 
             File.AppendAllText(_path, dateRow);
@@ -45,7 +45,7 @@ namespace Timesheet.DataAccess.CSV
                 var dataMembers = dataRow.Split(_delimeter);
                 timeLog.Comment = dataMembers[0];
                 timeLog.Date = DateTime.TryParse(dataMembers[1], out var date) ? date : new DateTime();
-                timeLog.LastName = dataMembers[2];
+                timeLog.Name = dataMembers[2];
                 timeLog.WorkingHours = int.TryParse(dataMembers[3], out var workingHours) ? workingHours : 0;
             }
 

@@ -1,8 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Timesheet.Domain;
 using Timesheet.Domain.Models;
 
@@ -10,19 +6,18 @@ namespace Timesheet.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EmployeeController : ControllerBase
+    public class StaffEmployeeController : Controller
     {
         private readonly IEmployeeService _employeeService;
-
-        public EmployeeController(IEmployeeService employeeService)
+        public StaffEmployeeController(IEmployeeService employeeService)
         {
             _employeeService = employeeService;
         }
 
         [HttpPost]
-        public ActionResult<bool> Add(Employee employee)
+        public ActionResult<bool> Add(StaffEmployee staffEmployee)
         {
-            return Ok(_employeeService.Add(employee));
+            return Ok(_employeeService.Add(staffEmployee));
         }
     }
 }

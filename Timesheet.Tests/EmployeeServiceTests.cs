@@ -23,16 +23,16 @@ namespace Timesheet.Tests
             var staffEmployee = new StaffEmployee(lastname, salary);
             var employeeRepositoryMock = new Mock<IEmployeeRepository>();
             employeeRepositoryMock
-                .Setup(x => x.AddEmployee(staffEmployee))
+                .Setup(x => x.Add(staffEmployee))
                 .Verifiable();
 
             var service = new EmployeeService(employeeRepositoryMock.Object);
 
             // act
-            var result = service.AddEmployee(staffEmployee);
+            var result = service.Add(staffEmployee);
 
             // assert
-            employeeRepositoryMock.Verify(x => x.AddEmployee(staffEmployee), Times.Once);
+            employeeRepositoryMock.Verify(x => x.Add(staffEmployee), Times.Once);
 
             Assert.IsTrue(result);
         }
@@ -51,13 +51,12 @@ namespace Timesheet.Tests
             var service = new EmployeeService(employeeRepositoryMock.Object);
 
             // act
-            var result = service.AddEmployee(staffEmployee);
+            var result = service.Add(staffEmployee);
 
             // assert
-            employeeRepositoryMock.Verify(x => x.AddEmployee(It.IsAny<StaffEmployee>()), Times.Never);
+            employeeRepositoryMock.Verify(x => x.Add(It.IsAny<StaffEmployee>()), Times.Never);
 
             Assert.IsFalse(result);
         }
     }
 }
-
