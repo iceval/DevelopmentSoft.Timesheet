@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -12,13 +13,13 @@ namespace Timesheet.Api
     public class JwtAuthMiddleware
     {
         private readonly RequestDelegate _next;
+        private readonly IConfiguration _configuration;
 
-        public JwtAuthMiddleware(RequestDelegate next)
+        public JwtAuthMiddleware(RequestDelegate next, IConfiguration configuration)
         {
             _next = next;
+            _configuration = configuration;
         }
-
-        // "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJMYXN0TmFtZSI6ItCY0LLQsNC90L7QsiIsIm5iZiI6MTY1NjgyMjEwMywiZXhwIjoxNjU2ODI1NzAzLCJpYXQiOjE2NTY4MjIxMDMsImF1ZCI6IkNoaWVmIn0.rd9c-hwdRNMWqTailUIWYxS_Bz7DCJDh6w4u66uO6D4"
 
         public async Task Invoke(HttpContext context)
         {
@@ -27,7 +28,11 @@ namespace Timesheet.Api
 
             if (authHeader != null)
             {
-                var secret = "secret secret secret secret secret";
+                var secret = _configuration.GetSection("jwtSecret").Value;
+                if (string.IsNullOrWhiteSpace(secret))
+                {
+                    throw new Exception("Set up your secret");
+                }
                 var key = Encoding.UTF8.GetBytes(secret);
 
                 var token = authHeader.Split(" ").Last();
