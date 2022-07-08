@@ -22,7 +22,7 @@ namespace Timesheet.Api.Controllers
         [HttpGet]
         public ActionResult<Issues[]> Get()
         {
-            return Ok(_issuesService.Get());
+            return Ok(_issuesService.Get("iceval", "Timesheets"));
         }
     }
 }

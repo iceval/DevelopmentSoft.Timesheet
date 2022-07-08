@@ -18,15 +18,17 @@ namespace Timesheet.Tests
         {
             // arrange
             var lastname = Guid.NewGuid().ToString();
+            var managerLogin = Guid.NewGuid().ToString();
+            var project = Guid.NewGuid().ToString();
 
             var employeeRepository = new Mock<IEmployeeRepository>();
 
             var expectedEmployee = new StaffEmployee(lastname, 20000);
 
-            employeeRepository
-                .Setup(x => x.Get(lastname))
-                .Returns(expectedEmployee)
-                .Verifiable();
+            //employeeRepository
+            //    .Setup(x => x.Get(lastname))
+            //    .Returns(expectedEmployee)
+            //    .Verifiable();
 
             var issuesClientMock = new Mock<IIssuesClient>();
             var expectedIssue = new Issues
@@ -37,14 +39,14 @@ namespace Timesheet.Tests
             };
 
             issuesClientMock
-                .Setup(x => x.Get("iceval"))
+                .Setup(x => x.Get(managerLogin, project))
                 .ReturnsAsync(new[] { expectedIssue })
                 .Verifiable();
 
             var service = new IssuesService(employeeRepository.Object, issuesClientMock.Object);
 
             // act
-            var issue = service.Get();
+            var issue = service.Get(managerLogin, project);
 
             // assert
             issuesClientMock.VerifyAll();

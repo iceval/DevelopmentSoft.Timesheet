@@ -14,19 +14,19 @@ namespace Timesheet.Integrations.GitHub
 
         public IssuesClient(string token)
         {
-            var client = new GitHubClient(new ProductHeaderValue("my-cool-app")); // not real token
+            var client = new GitHubClient(new ProductHeaderValue("my-cool-app")); // NOTE: not real token
             var tokenAuth = new Credentials(token);
             client.Credentials = tokenAuth;
 
             _gitHubClient = client;
         }
 
-        public async Task<Issues[]> Get(string login)
+        public async Task<Issues[]> Get(string managerLogin, string project)
         {
             var projects = await _gitHubClient
                 .Repository
                 .Project
-                .GetAllForRepository("iceval", "DevelopmentSoft.Timesheet");
+                .GetAllForRepository(managerLogin, "project name");
 
             var timesheetProject = projects.FirstOrDefault();
 

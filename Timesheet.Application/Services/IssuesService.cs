@@ -19,16 +19,9 @@ namespace Timesheet.BussinessLogic.Services
             _client = client;
         }
 
-        /*
-         3) Получаем информацию о пользователе (роль и фамилия)
-         4) Получаем список задач из системы с задачами
-         5) Возвращаем список задач
-         */
-
-        public Issues[] Get()
+        public Issues[] Get(string expectedLogin, string expectedProject)
         {
-            //
-            var issues = _client.Get("iceval").Result;
+            var issues = _client.Get(expectedLogin, expectedProject).Result;
 
             //map
 

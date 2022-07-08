@@ -39,7 +39,7 @@ namespace Timesheet.Tests
         public void Login_InvokeLoginTwiceForOneLastName_ShouldReturnTrue()
         {
             // arrange
-            var lastName = "??????";
+            var lastName = "Иванов";
 
             // act
             var token1 = _service.Login(lastName);
