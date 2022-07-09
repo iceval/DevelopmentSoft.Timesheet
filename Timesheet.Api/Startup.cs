@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Timesheet.Api.Models;
+using Timesheet.Api.ResourceModels;
 using Timesheet.BussinessLogic.Services;
 using Timesheet.Domain;
 using Timesheet.DataAccess.CSV;
@@ -30,7 +31,8 @@ namespace Timesheet.Api
         {
             services.AddAutoMapper(typeof(ApiMappingProfile), typeof(DataAccessMappingProfile));
 
-            services.AddTransient<IValidator<CreateTimeLogRequest>, TimeLogFluentValidator>(); 
+            services.AddTransient<IValidator<CreateTimeLogRequest>, TimeLogFluentValidator>();
+            services.AddTransient<IValidator<LoginRequest>, LoginRequestFluentValidator>();
 
             services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<ITimesheetRepository, DataAccess.CSV.TimesheetRepository>();

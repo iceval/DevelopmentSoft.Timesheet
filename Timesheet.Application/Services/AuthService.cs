@@ -32,7 +32,7 @@ namespace Timesheet.BussinessLogic.Services
 
             if (employee == null)
             {
-                throw new NotFoundException($"Employee with last name {lastName}");
+                throw new NotFoundException($"Employee with last name {lastName} not found");
             }
 
             var token = GenerateToken(secret, employee);
