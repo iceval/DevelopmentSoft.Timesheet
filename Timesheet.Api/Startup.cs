@@ -13,6 +13,7 @@ using Timesheet.BussinessLogic.Services;
 using Timesheet.Domain;
 using Timesheet.DataAccess.CSV;
 using Timesheet.DataAccess.MSSQL;
+using Timesheet.DataAccess.MSSQL.Repositories;
 using Timesheet.Integrations.GitHub;
 
 namespace Timesheet.Api
@@ -34,18 +35,21 @@ namespace Timesheet.Api
             services.AddTransient<IValidator<CreateTimeLogRequest>, TimeLogFluentValidator>();
             services.AddTransient<IValidator<LoginRequest>, LoginRequestFluentValidator>();
 
+
+            //services.AddTransient<ITimesheetRepository, DataAccess.CSV.TimesheetRepository>();
+            services.AddTransient<ITimesheetRepository, TimesheetRepository>();
+            //services.AddTransient<IEmployeeRepository, DataAccess.CSV.EmployeeRepository>();
+            services.AddTransient<IEmployeeRepository, EmployeeRepository>();
+
             services.AddTransient<IAuthService, AuthService>();
-            services.AddTransient<ITimesheetRepository, DataAccess.CSV.TimesheetRepository>();
             services.AddTransient<ITimesheetService, TimesheetService>();
-            services.AddTransient<IEmployeeRepository, DataAccess.CSV.EmployeeRepository>();
-            services.AddTransient<IEmployeeRepository, DataAccess.MSSQL.Repositories.EmployeeRepository>();
             services.AddTransient<IEmployeeService, EmployeeService>();
             services.AddTransient<IReportService, ReportService>();
             services.AddTransient<IIssuesService, IssuesService>();
 
             services.AddTransient<IIssuesClient>(x => new IssuesClient("jkdfg_FSShs4S543hdgbds4352fgdgfdg3423dsd"));
 
-            services.AddSingleton(x => new CsvSettings(';', "..\\Timesheet.DataAccess.CSV\\Data"));
+            //services.AddSingleton(x => new CsvSettings(';', "..\\Timesheet.DataAccess.CSV\\Data"));
 
             services.AddOptions<JwtConfig>()
                 .Bind(Configuration.GetSection("JwtConfig"));

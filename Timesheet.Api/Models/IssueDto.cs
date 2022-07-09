@@ -1,6 +1,4 @@
-﻿9 lines(9 sloc)  195 Bytes
-
-namespace Timesheet.Api.Models
+﻿namespace Timesheet.Api.Models
 {
     public class IssueDto
     {

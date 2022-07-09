@@ -20,13 +20,13 @@ namespace Timesheet.DataAccess.CSV
             _path = csvSettings.Path + "\\timesheet.csv";
         }
 
-        public void Add(TimeLog timelog)
+        public void Add(TimeLog timeLog)
         {
 
-            var dateRow = $"{timelog.Comment}{_delimeter}" +
-                $"{timelog.Date}{_delimeter}" +
-                $"{timelog.LastName}{_delimeter}" +
-                $"{timelog.WorkingHours}\n";
+            var dateRow = $"{timeLog.Comment}{_delimeter}" +
+                $"{timeLog.Date}{_delimeter}" +
+                $"{timeLog.LastName}{_delimeter}" +
+                $"{timeLog.WorkingHours}\n";
 
             File.AppendAllText(_path, dateRow);
         }
