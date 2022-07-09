@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,10 +17,12 @@ namespace Timesheet.Api.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
+        private readonly IOptions<JwtConfig> _jwtconfig;
 
-        public AuthController(IAuthService authService)
+        public AuthController(IAuthService authService, IOptions<JwtConfig> jwtconfig)
         {
             _authService = authService;
+            _jwtconfig = jwtconfig;
         }
 
         [HttpPost]
@@ -27,9 +30,10 @@ namespace Timesheet.Api.Controllers
         {
             try
             {
-                var token = _authService.Login(request.LastName);
+                var secret = _jwtconfig.Value.Secret;
+                var token = _authService.Login(request.LastName, secret);
 
-                return Ok(_authService.Login(request.LastName));
+                return Ok(token);
             }
             catch (NotFoundException ex)
             {

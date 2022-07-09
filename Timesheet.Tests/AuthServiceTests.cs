@@ -27,8 +27,14 @@ namespace Timesheet.Tests
         public void Login_ShouldReturnToken(string lastName)
         {
             // arrange
+            var secret = Guid.NewGuid().ToString();
+
+            _employeeRepositoryMock.Setup(x => x.Get(It.Is<string>(y => y == lastName)))
+                .Returns(() => new StaffEmployee(lastName, 70000))
+                .Verifiable();
+
             // act
-            var result = _service.Login(lastName);
+            var result = _service.Login(lastName, secret);
 
             // assert
             _employeeRepositoryMock.VerifyAll();
@@ -39,11 +45,16 @@ namespace Timesheet.Tests
         public void Login_InvokeLoginTwiceForOneLastName_ShouldReturnTrue()
         {
             // arrange
+            var secret = Guid.NewGuid().ToString();
             var lastName = "Иванов";
 
+            _employeeRepositoryMock.Setup(x => x.Get(It.Is<string>(y => y == lastName)))
+                .Returns(() => new StaffEmployee(lastName, 70000))
+                .Verifiable();
+
             // act
-            var token1 = _service.Login(lastName);
-            var token2 = _service.Login(lastName);
+            var token1 = _service.Login(lastName, secret);
+            var token2 = _service.Login(lastName, secret);
 
             // assert
             _employeeRepositoryMock.VerifyAll();
@@ -58,9 +69,11 @@ namespace Timesheet.Tests
         public void Login_NotValidArgument_ShouldThrowArgumentException(string lastName)
         {
             // arrange
+            var secret = Guid.NewGuid().ToString();
+
             // act
             string result = null;
-            Assert.Throws<ArgumentException>(() => _service.Login(lastName));
+            Assert.Throws<ArgumentException>(() => _service.Login(lastName, secret));
 
             // assert
             _employeeRepositoryMock.Verify(x => x.Get(lastName), Times.Never);
@@ -72,9 +85,11 @@ namespace Timesheet.Tests
         public void Login_UserDoesntExist_ShouldThrowNotFoundException(string lastName)
         {
             // arrange
+            var secret = Guid.NewGuid().ToString();
+
             // act
             string result = null;
-            Assert.Throws<NotFoundException>(() => result = _service.Login(lastName));
+            Assert.Throws<NotFoundException>(() => result = _service.Login(lastName, secret));
 
             // assert
             _employeeRepositoryMock.Verify(x => x.Get(lastName), Times.Once);

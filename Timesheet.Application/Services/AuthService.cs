@@ -20,12 +20,13 @@ namespace Timesheet.BussinessLogic.Services
             _employeeRepository = employeeRepository;
         }
 
-        public string Login(string lastName)
+        public string Login(string lastName, string secret)
         {
+            if (string.IsNullOrWhiteSpace(secret))
+                throw new ArgumentException(nameof(secret));
+
             if (string.IsNullOrWhiteSpace(lastName))
-            {
                 throw new ArgumentException(nameof(lastName));
-            }
 
             var employee = _employeeRepository.Get(lastName);
 
@@ -34,7 +35,6 @@ namespace Timesheet.BussinessLogic.Services
                 throw new NotFoundException($"Employee with last name {lastName}");
             }
 
-            var secret = "secret secret secret secret secret";
             var token = GenerateToken(secret, employee);
 
             return token;

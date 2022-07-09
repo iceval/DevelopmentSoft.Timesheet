@@ -18,6 +18,7 @@ namespace Timesheet.Tests
         private Mock<ITimesheetRepository> _timesheetRepositoryMock;
         private Mock<IEmployeeRepository> _employeeRepositoryMock;
 
+        [SetUp]
         public void SetUp()
         {
             _timesheetRepositoryMock = new Mock<ITimesheetRepository>();
