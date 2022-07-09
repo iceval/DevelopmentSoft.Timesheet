@@ -28,7 +28,7 @@ namespace Timesheet.Domain.Models
         public override bool CheckInputLog(TimeLog timeLog)
         {
             bool isValid = base.CheckInputLog(timeLog);
-            isValid = timeLog.Name == this.LastName && timeLog.Date > DateTime.Now.AddDays(-2) && isValid;
+            isValid = timeLog.LastName == this.LastName && timeLog.Date > DateTime.Now.AddDays(-2) && isValid;
             return isValid;
         }
     }

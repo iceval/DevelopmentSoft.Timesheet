@@ -31,7 +31,7 @@ namespace Timesheet.Domain.Models
             bool isValid = timeLog.Date <= DateTime.Now && timeLog.Date > timeLog.Date.AddYears(-1);
             isValid = timeLog.WorkingHours > 0
                 && timeLog.WorkingHours <= 24
-                && !string.IsNullOrWhiteSpace(timeLog.Name) && isValid;
+                && !string.IsNullOrWhiteSpace(timeLog.LastName) && isValid;
             return isValid;
         }
     }

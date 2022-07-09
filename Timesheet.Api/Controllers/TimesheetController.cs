@@ -27,7 +27,7 @@ namespace Timesheet.Api.Controllers
         [HttpPost]
         public ActionResult<bool> TrackTime(CreateTimeLogRequest request)
         {
-            var lastname = (string)HttpContext.Items["LastName"];
+            //string lastname = (string)HttpContext.Items["LastName"];
 
             if (ModelState.IsValid)
             {
@@ -40,7 +40,7 @@ namespace Timesheet.Api.Controllers
                 //    WorkingHours = request.WorkingHours
                 //};
 
-                var result = _timesheetService.TrackTime(timeLog, lastname);
+                var result = _timesheetService.TrackTime(timeLog, timeLog.LastName);
                 return Ok(result);
             }
 

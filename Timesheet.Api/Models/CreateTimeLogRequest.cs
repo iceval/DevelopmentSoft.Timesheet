@@ -15,7 +15,7 @@ namespace Timesheet.Api.Models
         public string Comment { get; set; }
     }
 
-    public class TimeLogValidator
+    /*public class TimeLogValidator
     {
         private readonly CreateTimeLogRequest _timeLog;
 
@@ -40,7 +40,7 @@ namespace Timesheet.Api.Models
 
             return (isValid, validationResults);
         }
-    }
+    }*/
 
     public class TimeLogFluentValidator : AbstractValidator<CreateTimeLogRequest>
     {
@@ -52,7 +52,7 @@ namespace Timesheet.Api.Models
 
             RuleFor(x => x.WorkingHours)
                 .GreaterThan(0)
-                .LessThan(24);
+                .LessThanOrEqualTo(24);
 
             RuleFor(x => x.LastName)
                 .NotEmpty();

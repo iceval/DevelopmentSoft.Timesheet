@@ -26,19 +26,19 @@ namespace Timesheet.Tests
                 .Setup(x => x.GetTimeLogs(It.Is<string>(y => y == expectedLastName)))
                 .Returns(() => new[] {
                     new TimeLog {
-                        Name = expectedLastName,
+                        LastName = expectedLastName,
                         Date = DateTime.Now.AddDays(-2),
                         WorkingHours = 8,
                         Comment = Guid.NewGuid().ToString()
                     },
                     new TimeLog {
-                        Name = expectedLastName,
+                        LastName = expectedLastName,
                         Date = DateTime.Now.AddDays(-1),
                         WorkingHours = 8,
                         Comment = Guid.NewGuid().ToString()
                     },
                     new TimeLog {
-                        Name = expectedLastName,
+                        LastName = expectedLastName,
                         Date = DateTime.Now,
                         WorkingHours = 4,
                         Comment = Guid.NewGuid().ToString()
@@ -94,7 +94,7 @@ namespace Timesheet.Tests
                     DateTime dateTime = new DateTime(2020, 11, 1);
                     timelogs[0] = new TimeLog
                     {
-                        Name = expectedLastName,
+                        LastName = expectedLastName,
                         Date = dateTime,
                         WorkingHours = 9,
                         Comment = Guid.NewGuid().ToString()
@@ -104,7 +104,7 @@ namespace Timesheet.Tests
                         dateTime = dateTime.AddDays(1);
                         timelogs[i] = new TimeLog
                         {
-                            Name = expectedLastName,
+                            LastName = expectedLastName,
                             Date = dateTime,
                             WorkingHours = 8,
                             Comment = Guid.NewGuid().ToString()
@@ -190,7 +190,7 @@ namespace Timesheet.Tests
                 {
                     new TimeLog
                     {
-                        Name = expectedLastName,
+                        LastName = expectedLastName,
                         Comment = Guid.NewGuid().ToString(),
                         Date = DateTime.Now.AddDays(-1),
                         WorkingHours = 12
@@ -240,7 +240,7 @@ namespace Timesheet.Tests
                 {
                     new TimeLog
                     {
-                        Name = expectedLastName,
+                        LastName = expectedLastName,
                         Comment = Guid.NewGuid().ToString(),
                         Date = DateTime.Now.AddDays(-1),
                         WorkingHours = 12
@@ -291,7 +291,7 @@ namespace Timesheet.Tests
                 {
                     new TimeLog
                     {
-                        Name = expectedLastName,
+                        LastName = expectedLastName,
                         Comment = Guid.NewGuid().ToString(),
                         Date = DateTime.Now.AddDays(-1),
                         WorkingHours = 12

@@ -37,7 +37,7 @@ namespace Timesheet.Tests
             {
                 Date = DateTime.Now,
                 WorkingHours = 1,
-                Name = expectedLastName,
+                LastName = expectedLastName,
                 Comment = Guid.NewGuid().ToString()
             };
 
@@ -65,7 +65,7 @@ namespace Timesheet.Tests
             {
                 Date = DateTime.Now,
                 WorkingHours = 1,
-                Name = Guid.NewGuid().ToString(),
+                LastName = Guid.NewGuid().ToString(),
                 Comment = Guid.NewGuid().ToString()
             };
 
@@ -93,7 +93,7 @@ namespace Timesheet.Tests
             {
                 Date = DateTime.Now.AddDays(-10),
                 WorkingHours = 1,
-                Name = expectedLastName,
+                LastName = expectedLastName,
                 Comment = Guid.NewGuid().ToString()
             };
 
@@ -121,7 +121,7 @@ namespace Timesheet.Tests
             {
                 Date = DateTime.Now,
                 WorkingHours = 1,
-                Name = expectedLastName,
+                LastName = expectedLastName,
                 Comment = Guid.NewGuid().ToString()
             };
 
@@ -155,7 +155,7 @@ namespace Timesheet.Tests
             {
                 Date = new DateTime(),
                 WorkingHours = hours,
-                Name = lastName,
+                LastName = lastName,
                 Comment = Guid.NewGuid().ToString()
             };
 
@@ -165,7 +165,7 @@ namespace Timesheet.Tests
                 .Verifiable();
 
             // act
-            var result = _service.TrackTime(timeLog, timeLog.Name);
+            var result = _service.TrackTime(timeLog, timeLog.LastName);
 
             // assert
             _employeeRepositoryMock.VerifyAll();
@@ -183,7 +183,7 @@ namespace Timesheet.Tests
             {
                 Date = DateTime.Now,
                 WorkingHours = 2,
-                Name = expectedLastName,
+                LastName = expectedLastName,
                 Comment = Guid.NewGuid().ToString()
             };
 
@@ -215,7 +215,7 @@ namespace Timesheet.Tests
             {
                 Date = DateTime.Now.AddDays(-3),
                 WorkingHours = 2,
-                Name = expectedLastName,
+                LastName = expectedLastName,
                 Comment = Guid.NewGuid().ToString()
             };
 
