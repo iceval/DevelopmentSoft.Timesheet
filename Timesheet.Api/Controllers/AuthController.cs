@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -22,11 +23,15 @@ namespace Timesheet.Api.Controllers
     {
         private readonly IAuthService _authService;
         private readonly IOptions<JwtConfig> _jwtconfig;
+        private readonly ILogger<AuthController> _logger;
 
-        public AuthController(IAuthService authService, IOptions<JwtConfig> jwtconfig)
+        public AuthController(IAuthService authService,
+            IOptions<JwtConfig> jwtconfig,
+            ILogger<AuthController> logger)
         {
             _authService = authService;
             _jwtconfig = jwtconfig;
+            _logger = logger;
         }
 
         /// <summary>

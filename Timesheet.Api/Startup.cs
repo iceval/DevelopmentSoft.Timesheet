@@ -2,19 +2,26 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using Timesheet.Api.Models;
 using Timesheet.Api.ResourceModels;
 using Timesheet.BussinessLogic.Services;
-using Timesheet.Domain;
 //using Timesheet.DataAccess.CSV;
 using Timesheet.DataAccess.MSSQL;
 using Timesheet.DataAccess.MSSQL.Repositories;
+using Timesheet.Domain;
 using Timesheet.Integrations.GitHub;
 
 namespace Timesheet.Api
@@ -31,6 +38,8 @@ namespace Timesheet.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddLogging();
+
             services.AddAutoMapper(typeof(ApiMappingProfile), typeof(DataAccessMappingProfile));
 
             services.AddTransient<IValidator<CreateTimeLogRequest>, TimeLogFluentValidator>();
@@ -71,6 +80,11 @@ namespace Timesheet.Api
 
             services.AddControllers().AddFluentValidation();
             services.AddControllers();
+
+            var serviceProvider = services.BuildServiceProvider();
+
+            var logger = serviceProvider.GetService<ILogger<ControllerBase>>();
+            services.AddSingleton(typeof(ILogger), logger);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
