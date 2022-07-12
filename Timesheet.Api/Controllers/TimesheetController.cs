@@ -31,7 +31,7 @@ namespace Timesheet.Api.Controllers
         [HttpPost]
         public ActionResult<bool> TrackTime(CreateTimeLogRequest request)
         {
-            _logger.LogInformation("Пользователь фиксирует рабочее время" + JsonConvert.SerializeObject(request, Formatting.Indented));
+            _logger.LogInformation("Пользователь фиксирует рабочее время {@Request}", request);
 
             if (ModelState.IsValid)
             {
